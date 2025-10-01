@@ -1,7 +1,8 @@
 import { Main } from "@/app/Main.tsx"
 import { Route, Routes } from "react-router"
 import { Login } from "@/features/todolists/ui/Login/Login.tsx"
-import { PageNotFound } from "@/common/components/PageNotFound/PageNotFound.tsx"
+import { PageNotFound } from "@/common/components"
+
 
 
 export const Path = {

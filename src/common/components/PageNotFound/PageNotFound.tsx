@@ -1,8 +1,10 @@
-import styles from "./PageNoteFound.module.css"
+import s from "./PageNotFound.module.css"
 
-export const PageNotFound = () => (
-  <>
-    <h1 className={styles.title}>404</h1>
-    <h2 className={styles.subtitle}>page not found</h2>
-  </>
-)
+export const PageNotFound = () => {
+  return (
+    <>
+      <h1 className={s.title}>404</h1>
+      <h2 className={s.subtitle}>page not found</h2>
+    </>
+  )
+}
