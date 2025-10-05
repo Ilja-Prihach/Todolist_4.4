@@ -3,7 +3,8 @@ import { ResultCode } from "@/common/enums"
 import type { RequestStatus } from "@/common/types"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi"
-import type { Todolist } from "@/features/todolists/api/todolistsApi.types"
+// import type { Todolist } from "@/features/todolists/api/todolistsApi.types"
+import { Todolist, todolistsResponseSchema } from "@/features/auth/lib/shemas/todolistShema.ts"
 
 export const todolistsSlice = createAppSlice({
   name: "todolists",
@@ -17,8 +18,18 @@ export const todolistsSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           const res = await todolistsApi.getTodolists()
+
+
+          const validationResult = todolistsResponseSchema.safeParse(res.data)
+
+          if (!validationResult.success) {
+            console.error('Todolists validation failed:', validationResult.error)
+            handleServerNetworkError(dispatch, new Error('Invalid server response format'))
+            return rejectWithValue(null)
+          }
+
           dispatch(setAppStatusAC({ status: "succeeded" }))
-          return { todolists: res.data }
+          return { todolists: validationResult.data }
         } catch (error) {
           handleServerNetworkError(dispatch, error)
           return rejectWithValue(null)
