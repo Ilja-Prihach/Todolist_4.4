@@ -8,22 +8,30 @@
 // }
 
 
-import { Todolist } from "@/features/auth/lib/shemas/todolistShema.ts"
+// ❌
+// export type Todolist = {
+//   id: string
+//   title: string
+//   addedDate: string
+//   order: number
+// }
 
-export type CreateTodolistResponse = {
-  data: {
-    item: Todolist
-  }
-  resultCode: number
-  messages: string[]
-}
+import  { z } from 'zod'
+import { baseResponseSchema } from "@/common/types"
 
-export type DeleteTodolistResponse = {
-  resultCode: number
-  messages: string[]
-}
+export const todolistSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  addedDate: z.string().datetime({ local: true }),
+  order: z.number(),
+})
 
-export type UpdateTodolistResponse = {
-  resultCode: number
-  messages: string[]
-}
+export type Todolist = z.infer<typeof todolistSchema>
+
+export const createTodolistResponseSchema = baseResponseSchema(
+  z.object({
+    item: todolistSchema,
+  }),
+)
+
+export type CreateTodolistResponse = z.infer<typeof createTodolistResponseSchema>

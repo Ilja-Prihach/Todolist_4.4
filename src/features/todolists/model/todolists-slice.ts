@@ -1,6 +1,6 @@
 import { setAppStatusAC } from "@/app/app-slice"
 import { ResultCode } from "@/common/enums"
-import type { RequestStatus } from "@/common/types"
+import { defaultResponseSchema, RequestStatus } from "@/common/types"
 import { createAppSlice, handleServerAppError, handleServerNetworkError } from "@/common/utils"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi"
 // import type { Todolist } from "@/features/todolists/api/todolistsApi.types"
@@ -72,6 +72,7 @@ export const todolistsSlice = createAppSlice({
           dispatch(setAppStatusAC({ status: "loading" }))
           dispatch(changeTodolistStatusAC({ id, entityStatus: "loading" }))
           const res = await todolistsApi.deleteTodolist(id)
+          defaultResponseSchema.parse(res.data) // 💎 ZOD
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { id }
@@ -100,6 +101,7 @@ export const todolistsSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           const res = await todolistsApi.changeTodolistTitle(payload)
+          defaultResponseSchema.parse(res.data) // 💎 ZOD
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return payload
